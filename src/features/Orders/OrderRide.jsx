@@ -19,8 +19,8 @@ export default function RideBookingForm() {
   const [formData, setFormData] = useState({
     driverId: 0,
     vehicleId: 0,
-    sourceStationId:0,
-    destinationStationId:10,
+    sourceStationId: 0,
+    destinationStationId: 10,
     sourceAddress: "",
     destinationAddress: "",
     date: "",
@@ -47,29 +47,26 @@ export default function RideBookingForm() {
   }
 
   const orderRide = async () => {
-  const token = await localStorage.getItem("token");
-  if (!token) {
-    console.error("No token found in localStorage");
-    return; // אם אין token, מפסיקים את הפעולה
-  }
+    const token = await localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found in localStorage");
+      return;
+    }
 
-  const userData = await parseJwt(token);
-  setFormData({ ...formData, driverId: userData.Id });
-  console.log("Form Data Before Sending:", formData);
-};
+    const userData = await parseJwt(token);
+    setFormData({ ...formData, driverId: userData.Id });
+    console.log("Form Data Before Sending:", formData);
+  };
 
-    // try {
-    //   let { data } = await axios.post(
-    //     "https://localhost:7249/api/Ride",
-    //     formData
-    //   );
-    //   console.log(data);
-    // } catch (error) {
-    //   console.error("Error Sending Request:", error.response.data); // Log Error Details
-    // }
-
-
-
+  // try {
+  //   let { data } = await axios.post(
+  //     "https://localhost:7249/api/Ride",
+  //     formData
+  //   );
+  //   console.log(data);
+  // } catch (error) {
+  //   console.error("Error Sending Request:", error.response.data); // Log Error Details
+  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
