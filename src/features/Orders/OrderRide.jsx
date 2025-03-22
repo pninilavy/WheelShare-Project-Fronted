@@ -47,10 +47,16 @@ export default function RideBookingForm() {
   }
 
   const orderRide = async () => {
-    const token =await  localStorage.getItem("token");
-    const userData =await parseJwt(token);
-    setFormData({ ...formData, driverId: userData.Id });
-    console.log("Form Data Before Sending:", formData); 
+  const token = await localStorage.getItem("token");
+  if (!token) {
+    console.error("No token found in localStorage");
+    return; // אם אין token, מפסיקים את הפעולה
+  }
+
+  const userData = await parseJwt(token);
+  setFormData({ ...formData, driverId: userData.Id });
+  console.log("Form Data Before Sending:", formData);
+};
 
     // try {
     //   let { data } = await axios.post(
@@ -61,7 +67,6 @@ export default function RideBookingForm() {
     // } catch (error) {
     //   console.error("Error Sending Request:", error.response.data); // Log Error Details
     // }
-  };
 
 
 
