@@ -1,0 +1,17 @@
+.Formsbackground {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(215, 255, 215, 0.4); /* ירוק בהיר עם שקיפות */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* מצמיד לתחתית */
+}
+
+.background-image {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}

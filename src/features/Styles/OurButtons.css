@@ -1,0 +1,20 @@
+/* עיצוב כפתורים */
+.button-image {
+  position: fixed;
+  left: 5%; 
+  width: 8%; 
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.button-image.left {
+  margin-top: 5%; 
+}
+
+.button-image.left + .button-image.left {
+  margin-top: 15%;
+}
+
+.button-image:hover {
+  transform: scale(1.2);
+}

@@ -1,0 +1,168 @@
+html, body {
+  overflow-x: hidden;
+}
+.background {
+  width: 100vw;
+  overflow: hidden;
+}
+.background {
+  display: flex;
+  width: 100vw;
+  height: 85vh;
+  position: absolute;
+  top: 0%;
+}
+
+.green-side {
+  flex-grow: 1;
+  background-color: #00e079;
+  height: 85vh;
+}
+
+.white-side {
+  width: 100px;
+  background-color: white;
+  height: 100%;
+}
+
+.buildings {
+  position: absolute;
+  width: 70vw;
+  top: 25%;
+  left: 10%;
+}
+
+.car {
+  position: absolute;
+  width: 70vh;
+  top: 55vh;
+  transition: left 0.3s ease;
+}
+
+.logo {
+  position: absolute;
+  right: 0px;
+  width: 170px;
+  height: auto;
+}
+
+.sidebar {
+  position: sticky;
+  right: 0;
+  top: 10%;
+  width: 100px;
+  padding: 100% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 85vh;
+}
+
+.sidebar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #00e079;
+  font-size: 14px;
+  transition: 0.3s;
+  margin: 30px 0;
+}
+
+.sidebar-item:hover {
+  color: darkgreen;
+}
+
+.icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+
+@font-face {
+  font-family: 'Eras Bold ITC';
+  src: url('../../../fonts/eras-itc-bold.ttf') format('truetype'); 
+  font-weight: bold;
+  font-style: normal;
+}
+.title{
+  position: absolute;
+  top: 5%; /* למעלה */
+  left: 50%; /* למרכז אופקית */
+  transform: translateX(-50%); 
+  text-align: center;
+  color: white; /* צבע לבן */
+  font-family: 'Eras Bold ITC', sans-serif; 
+  font-size: 2.8rem; 
+  font-weight: bold; 
+}
+.subtitle{
+  position: absolute;
+  top: 13%; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  text-align: center; 
+  color: white; 
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  margin: 0%;
+}
+
+
+
+.underline {
+  position: absolute;
+  height: 0.7%;
+  width: 0;
+  background: white; 
+  left: 43%;
+  top: 20%;
+  animation: fillLine 2s linear infinite;
+}
+
+@keyframes fillLine {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 14%;
+  }
+}
+.user-alert {
+  color: black;
+  font-size: medium;
+  text-align: center;
+  padding:1% 20px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  position: absolute;
+  top: 50%; /* מיקום לגובה */
+  right: 15%; /* מיקום לימין */
+  transform: translateY(-50%); /* ממרכז את ההודעה במדויק בגובה */
+  width: 10%;  /* רוחב מקסימלי של ההודעה */
+  word-wrap: break-word;  /* שובר את המילים כך שיתפוס שורה חדשה */
+  z-index: 3;
+}
+
+.back-button {
+  position: absolute;
+  top: 65%;  /* מיקום הכפתור אחרי ההודעה */
+  right: 17.2%;  /* ממוקם בצד ימין */
+  transform: translateY(-50%); /* ממרכז אותו בגובה */
+  background-color: #00E079;
+  border: none;
+  color: #535252;
+  padding:0.5% 1.5 ;
+  font-size: medium;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0, 224, 121, 0.5);
+  transition: background-color 0.3s ease;
+  z-index: 3;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.back-button:hover {
+  background-color: #00C96B;
+}

@@ -1,0 +1,81 @@
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5%;
+  flex-wrap: wrap;
+  margin: 2% auto;
+  width: 100%;
+  margin-top: 85vh;
+}
+.card-container {
+  width: 20%;
+  text-align: center;
+}
+
+.card {
+  
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 5%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: #00e079;
+  width: 80%;
+  height:400px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.image {
+  width:80%;
+  border-radius: 8px;
+  align-self: center;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.text {
+  font-size: 14px;
+  color: #333;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+h1 {
+  margin: 0.5% 0 2% 0%;
+  text-align: center;
+  width: 100%;
+  color: #333;
+  position: relative; /* מאפשר לפס להיות ממוקם ביחס לכותרת */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.underlineFeature {
+  position: relative;
+  height: 4px;
+  width: 0;
+  background: #00e079; /* צבע הפס */
+  margin-top: 3%; 
+  animation: fillLine 2s linear infinite;
+}
+
+@keyframes fillLine {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 14%;
+  }
+}
