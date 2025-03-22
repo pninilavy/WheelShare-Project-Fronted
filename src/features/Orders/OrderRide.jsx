@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "../Styles/OrderRide.css";
+import axios from "axios";
+import "../Styles/OrderRide.css"; // Adjust the path if necessary
 import {
   TextField,
   Button,
@@ -10,9 +11,6 @@ import {
   Grid,
   Switch,
   FormControlLabel,
-  Dialog,
-  DialogTitle,
-  DialogActions,
 } from "@mui/material";
 import { People, LocationOn, Home } from "@mui/icons-material";
 import FormsBackground from "../Pages/FormsBackground";
@@ -20,25 +18,23 @@ import FormsBackground from "../Pages/FormsBackground";
 export default function RideBookingForm() {
   const [formData, setFormData] = useState({
     driverId: 0,
-    vehicleId: 2007,
-
+    vehicleId: 0,
+    sourceStationId:0,
+    destinationStationId:10,
+    sourceAddress: "",
+    destinationAddress: "",
     date: "",
-    time: "",
-    duration: "",
-    seats: "",
+    startTime: "",
+    endTime: "",
+    status: "ONHOLD",
+    totalCost: 0,
     sharedRide: false,
-    destination: "",
-    address: "",
-    locationDetection: false,
+    numSeats: 0,
   });
-
-  const [openDialog, setOpenDialog] = useState(false);
 
   function parseJwt(token) {
     const base64Url = token.split(".")[1];
-
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-
     const jsonPayload = decodeURIComponent(
       atob(base64)
         .split("")
@@ -47,14 +43,28 @@ export default function RideBookingForm() {
         })
         .join("")
     );
-
     return JSON.parse(jsonPayload);
   }
-  const orderRide = () => {
-    const token = localStorage.getItem("token");
-    const userData = parseJwt(token);
-    console.log(userData);
+
+  const orderRide = async () => {
+    const token =await  localStorage.getItem("token");
+    const userData =await parseJwt(token);
+    setFormData({ ...formData, driverId: userData.Id });
+    console.log("Form Data Before Sending:", formData); 
+
+    // try {
+    //   let { data } = await axios.post(
+    //     "https://localhost:7249/api/Ride",
+    //     formData
+    //   );
+    //   console.log(data);
+    // } catch (error) {
+    //   console.error("Error Sending Request:", error.response.data); // Log Error Details
+    // }
   };
+
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,15 +75,6 @@ export default function RideBookingForm() {
     setFormData({ ...formData, sharedRide: e.target.checked });
   };
 
-  const handleLocationChoice = (choice) => {
-    setFormData((prevData) => ({ ...prevData, locationDetection: choice }));
-    setOpenDialog(false); // סגירת ההודעה ישירות לאחר הבחירה
-  };
-
-  const handleAddressFocus = () => {
-    setOpenDialog(true);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Ride Booking Data Submitted:", formData);
@@ -81,7 +82,7 @@ export default function RideBookingForm() {
 
   return (
     <div className="OrderRideForm">
-      <FormsBackground></FormsBackground>
+      <FormsBackground />
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -112,11 +113,11 @@ export default function RideBookingForm() {
         <Grid container spacing={2}>
           {[
             { label: "תאריך", name: "date", type: "date" },
-            { label: "שעה", name: "time", type: "time" },
-            { label: "מספר שעות", name: "duration", type: "number" },
+            { label: "שעת התחלה", name: "startTime", type: "time" },
+            { label: "שעת סיום", name: "endTime", type: "time" },
             {
               label: "מספר מושבים",
-              name: "seats",
+              name: "numSeats",
               type: "number",
               icon: <People />,
             },
@@ -129,7 +130,7 @@ export default function RideBookingForm() {
                 value={formData[name]}
                 onChange={handleChange}
                 fullWidth
-                required:false="true"
+                required
                 InputProps={{
                   startAdornment: icon ? (
                     <InputAdornment position="start" sx={{ color: "#00E079" }}>
@@ -147,72 +148,31 @@ export default function RideBookingForm() {
                     },
                   },
                 }}
-                InputLabelProps={{
-                  sx: { color: "#00E079" },
-                  shrink: true,
-                }}
+                InputLabelProps={{ sx: { color: "#00E079" }, shrink: true }}
               />
             </Grid>
           ))}
 
-          <Grid item xs={12}>
-            <TextField
-              label="כתובת"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              fullWidth
-              required:false="true"
-              onFocus={handleAddressFocus}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start" sx={{ color: "#00E079" }}>
-                    <Home />
-                  </InputAdornment>
-                ),
-                sx: {
-                  borderRadius: "25px",
-                  backgroundColor: "#F5F5F5",
-                  fontSize: "16px",
-                  height: "55px",
-                  color: "gray",
-                  "&:focus-within fieldset": {
-                    borderColor: "#00E079 !important",
-                  },
-                },
-              }}
-              InputLabelProps={{ sx: { color: "#00E079" } }}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={formData.sharedRide}
-                  onChange={handleSwitchChange}
-                  color="success"
-                  sx={{ ".MuiSwitch-thumb": { backgroundColor: "#00E079" } }}
-                />
-              }
-              label="מעוניין בנסיעה משותפת"
-              sx={{ color: "#00E079" }}
-            />
-          </Grid>
-
-          {formData.sharedRide && (
-            <Grid item xs={12}>
+          {[
+            { label: "כתובת מוצא", name: "sourceAddress", icon: <Home /> },
+            {
+              label: "כתובת יעד",
+              name: "destinationAddress",
+              icon: <LocationOn />,
+            },
+          ].map(({ label, name, icon }) => (
+            <Grid item xs={12} key={name}>
               <TextField
-                label="תחנת יעד"
-                name="destination"
-                value={formData.destination}
+                label={label}
+                name={name}
+                value={formData[name]}
                 onChange={handleChange}
                 fullWidth
-                required:false="true"
+                required
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start" sx={{ color: "#00E079" }}>
-                      <LocationOn />
+                      {icon}
                     </InputAdornment>
                   ),
                   sx: {
@@ -229,20 +189,23 @@ export default function RideBookingForm() {
                 InputLabelProps={{ sx: { color: "#00E079" } }}
               />
             </Grid>
-          )}
-        </Grid>
+          ))}
 
-        <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-          <DialogTitle>?האם מעוניין בזיהוי מקום</DialogTitle>
-          <DialogActions>
-            <Button onClick={() => handleLocationChoice(true)} color="success">
-              כן
-            </Button>
-            <Button onClick={() => handleLocationChoice(false)} color="error">
-              לא
-            </Button>
-          </DialogActions>
-        </Dialog>
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={formData.sharedRide}
+                  onChange={handleSwitchChange}
+                  color="success"
+                  sx={{ ".MuiSwitch-thumb": { backgroundColor: "#00E079" } }}
+                />
+              }
+              label="מעוניין בנסיעה משותפת"
+              sx={{ color: "#00E079" }}
+            />
+          </Grid>
+        </Grid>
 
         <Button
           onClick={(e) => {
