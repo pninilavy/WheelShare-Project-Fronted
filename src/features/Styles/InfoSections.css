@@ -6,13 +6,15 @@
   flex-wrap: nowrap;
   gap: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 5%;
+  margin: 5% 0 5% 0;
 }
 
 .halfgreen, .halfBlue {
   width: 50vw;
   height: 45vh;
   position: relative;
-  overflow: hidden; /* להסתיר את האנימציה אם היא יוצאת מחוץ לדיב */
+  overflow: hidden; 
 }
 
 .halfgreen {

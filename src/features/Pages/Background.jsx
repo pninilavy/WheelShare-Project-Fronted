@@ -10,6 +10,7 @@ import Features from "./Features";
 import OurButtons from "./OurButtons";
 import { setCurrentUser } from "../User/userSlice";
 import InfoSections from "./InfoSections";
+import Footer from "./Footer";
 
 export default function Background() {
   const [carPosition, setCarPosition] = useState("100vw");
@@ -99,6 +100,7 @@ fetchData();
           </div>
           <Features></Features>
           <InfoSections></InfoSections>
+          <Footer></Footer>
         </>
       ) : (
         <div className="component-container">
