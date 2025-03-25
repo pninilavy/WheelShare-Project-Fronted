@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import "../Styles/OrderRide.css"; // Adjust the path if necessary
 import {
@@ -16,11 +17,13 @@ import { People, LocationOn, Home } from "@mui/icons-material";
 import FormsBackground from "../Pages/FormsBackground";
 
 export default function RideBookingForm() {
+  const currentUser = useSelector((state) => state.user.currentUser);
+
   const [formData, setFormData] = useState({
-    driverId: 0,
-    vehicleId: 0,
-    sourceStationId: 0,
-    destinationStationId: 10,
+    driveId: 0,
+    vehicleId: null,
+    sourceStationID: null,
+    destinationStationID: null,
     sourceAddress: "",
     destinationAddress: "",
     date: "",
@@ -32,41 +35,37 @@ export default function RideBookingForm() {
     numSeats: 0,
   });
 
-  function parseJwt(token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  }
+  
 
+
+  
   const orderRide = async () => {
-    const token = await localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (!token) {
       console.error("No token found in localStorage");
       return;
     }
 
-    const userData = await parseJwt(token);
-    setFormData({ ...formData, driverId: userData.Id });
-    console.log("Form Data Before Sending:", formData);
+    
+    const updatedFormData = {
+      ...formData,
+      driveId: currentUser?.Id, 
+      startTime: formData.startTime + ":00", 
+      endTime: formData.endTime + ":00",
+    };
+
+    console.log("Form Data Before Sending:", updatedFormData); 
+    try {
+      let { data } = await axios.post(
+        "https://localhost:7249/api/Ride",
+        updatedFormData
+      );
+      console.log("Response Data:", data);
+    } catch (error) {
+      console.error("Error Sending Request:", error.response?.data);
+    }
   };
 
-  // try {
-  //   let { data } = await axios.post(
-  //     "https://localhost:7249/api/Ride",
-  //     formData
-  //   );
-  //   console.log(data);
-  // } catch (error) {
-  //   console.error("Error Sending Request:", error.response.data); // Log Error Details
-  // }
 
   const handleChange = (e) => {
     const { name, value } = e.target;

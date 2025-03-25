@@ -1,0 +1,119 @@
+.infoContainer {
+  display: flex;
+  width: 100vw;
+  direction: rtl;
+  text-align: right;
+  flex-wrap: nowrap;
+  gap: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.halfgreen, .halfBlue {
+  width: 50vw;
+  height: 45vh;
+  position: relative;
+  overflow: hidden; /* להסתיר את האנימציה אם היא יוצאת מחוץ לדיב */
+}
+
+.halfgreen {
+  background-color: #00e079;
+  color: #000623;
+  direction: ltr;
+  text-align: left;
+}
+
+.halfBlue {
+  background-color: #000623;
+  color: white;
+}
+
+.infoTtile1, .infoTtile2 {
+  width: 10vw;
+  font-size: xx-large;
+  margin: 6%;
+  position: relative;
+}
+
+.infoSubTitle1, .infoSubTitle2 {
+  color: white;
+  width: 15vw;
+  margin: 6%;
+  margin-bottom: 0;
+}
+
+.infoButton1, .infoButton2 {
+  margin-bottom: 0;
+  margin-top: 3%;
+  margin-left: 6%;
+  margin-right: 6%;
+  padding: 1% 3%;
+  border-radius: 25px;
+  color: white;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.infoButton1 {
+  background-color: #000623;
+  direction: rtl;
+}
+
+.infoButton2 {
+  background-color: #00e079;
+}
+
+.infoTtile1, .infoSubTitle1 {
+  text-align: left;
+  direction: rtl;
+}
+
+/* קווים מציירים את עצמם בתוך הדיב */
+.halfgreen::before, .halfBlue::before {
+  content: "";
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  width: 0;
+  height: 2px; /* עובי הקו */
+  background: #000623; /* צבע הקו כחול בדיב הירוק */
+  animation: drawLineLeft 2s infinite alternate;
+}
+
+.halfgreen::after, .halfBlue::after {
+  content: "";
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  width: 0;
+  height: 2px; /* עובי הקו */
+  background: #00e079; /* צבע הקו ירוק בדיב הכחול */
+  animation: drawLineRight 2s infinite alternate;
+}
+
+@keyframes drawLineLeft {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes drawLineRight {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 50%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.infoButton1:hover, .infoButton2:hover {
+  background-color: #f1f1f1;
+  color: #000623;
+}

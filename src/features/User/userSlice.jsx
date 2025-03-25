@@ -1,5 +1,7 @@
+import { Cookie } from "@mui/icons-material";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useEffect } from "react";
 
 export const serverSignUp = createAsyncThunk(
   "user-SignUp",
@@ -12,7 +14,7 @@ export const serverSignUp = createAsyncThunk(
     return data;
   }
 );
-
+ 
 export const serverSignIn = createAsyncThunk(
   "user-SignIn",
   async (user, thunkApi) => {
@@ -42,7 +44,13 @@ export const userSlice = createSlice({
     status: null,
     message: "",
   },
-  reducers: {},
+  reducers: {
+    setCurrentUser: (state, action) => {
+      state.currentUser = action.payload;
+      console.log(state.currentUser);
+    },
+  },
+
   extraReducers: (builder) => {
     builder
       .addCase(serverSignIn.fulfilled, (state, action) => {
@@ -79,5 +87,6 @@ export const userSlice = createSlice({
       });
   },
 });
-
+export const { setCurrentUser } = userSlice.actions;
 export default userSlice.reducer;
+

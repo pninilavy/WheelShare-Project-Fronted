@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { FaShekelSign, FaInfoCircle, FaHeadset, FaUser } from "react-icons/fa";
 import NavBar from "./NavBar";
 import "../Styles/Background.css";
@@ -7,13 +8,45 @@ import logoImage from "../../../images/logo.png";
 import SignUp from "../User/SignUp";
 import Features from "./Features";
 import OurButtons from "./OurButtons";
+import { setCurrentUser } from "../User/userSlice";
+import InfoSections from "./InfoSections";
 
 export default function Background() {
   const [carPosition, setCarPosition] = useState("100vw");
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showAll, setShowAll] = useState(true);
+  const dispatch = useDispatch();
+
+  function parseJwt(token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  }
 
   useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+
+      try {
+        const userData = await parseJwt(token);
+        dispatch(setCurrentUser(userData));
+      } catch (error) {
+        console.error("Error parsing token:", error);
+      }
+    };
+fetchData();
     const interval = setInterval(() => {
       setCarPosition((prevPosition) => {
         const currentPosition = parseInt(prevPosition);
@@ -65,6 +98,7 @@ export default function Background() {
             <OurButtons onButtonClick={handleComponentChange} />
           </div>
           <Features></Features>
+          <InfoSections></InfoSections>
         </>
       ) : (
         <div className="component-container">
