@@ -1,6 +1,7 @@
 html, body {
   overflow-x: hidden;
 }
+
 .background {
   width: 100vw;
   overflow: hidden;
@@ -166,3 +167,33 @@ html, body {
 .back-button:hover {
   background-color: #00C96B;
 }
+.auth-buttons {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.auth-button {
+  background-color:#00E079;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #0d8a13;
+}
+
+.auth-icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+

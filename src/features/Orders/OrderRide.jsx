@@ -5,19 +5,32 @@ import "../Styles/OrderRide.css"; // Adjust the path if necessary
 import {
   TextField,
   Button,
-  MenuItem,
   Box,
   Typography,
   InputAdornment,
   Grid,
   Switch,
   FormControlLabel,
+  Snackbar,
+  Alert,
+  Slide,
+  CircularProgress,
 } from "@mui/material";
 import { People, LocationOn, Home } from "@mui/icons-material";
 import FormsBackground from "../Pages/FormsBackground";
 
+function SlideTransition(props) {
+  return <Slide {...props} direction="down" />;
+}
+
 export default function RideBookingForm() {
   const currentUser = useSelector((state) => state.user.currentUser);
+
+  // מצב טעינה והודעה
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const [formData, setFormData] = useState({
     driveId: 0,
@@ -35,37 +48,47 @@ export default function RideBookingForm() {
     numSeats: 0,
   });
 
-  
-
-
-  
   const orderRide = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.error("No token found in localStorage");
+      setMessage("שגיאה: אין טוקן במערכת");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
       return;
     }
 
-    
     const updatedFormData = {
       ...formData,
-      driveId: currentUser?.Id, 
-      startTime: formData.startTime + ":00", 
+      driveId: currentUser?.Id,
+      startTime: formData.startTime + ":00",
       endTime: formData.endTime + ":00",
     };
 
-    console.log("Form Data Before Sending:", updatedFormData); 
+    console.log("Form Data Before Sending:", updatedFormData);
+    setLoading(true);
+
     try {
       let { data } = await axios.post(
         "https://localhost:7249/api/Ride",
         updatedFormData
       );
-      console.log("Response Data:", data);
+      if (data === null) {
+        setMessage("מצטערים, אין רכב פנוי");
+        setSnackbarSeverity("error");
+      } else {
+        setMessage("הזמנתך נקלטה במערכת");
+        setSnackbarSeverity("success");
+      }
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Error Sending Request:", error.response?.data);
+      setMessage("אירעה שגיאה בשליחת ההזמנה");
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +107,35 @@ export default function RideBookingForm() {
   return (
     <div className="OrderRideForm">
       <FormsBackground />
+      {/* הודעה מוצגת למעלה במרכז */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        TransitionComponent={SlideTransition}
+        sx={{ width: "100%" }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={snackbarSeverity}
+          sx={{
+            fontSize: "18px",
+            p: 2,
+            width: "350px",
+            textAlign: "right", // מיושר לימין
+            backgroundColor:
+              snackbarSeverity === "success"
+                ? "#68e098" // ירוק בהיר
+                : snackbarSeverity === "error"
+                  ? "#ffc7c7"
+                  : "#ffc7c7", // אדום בהיר או אפור למקרים אחרים
+            color: "white",
+          }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -110,7 +162,6 @@ export default function RideBookingForm() {
         >
           הזמנת נסיעה
         </Typography>
-
         <Grid container spacing={2}>
           {[
             { label: "תאריך", name: "date", type: "date" },
@@ -153,7 +204,6 @@ export default function RideBookingForm() {
               />
             </Grid>
           ))}
-
           {[
             { label: "כתובת מוצא", name: "sourceAddress", icon: <Home /> },
             {
@@ -191,7 +241,6 @@ export default function RideBookingForm() {
               />
             </Grid>
           ))}
-
           <Grid item xs={12}>
             <FormControlLabel
               control={
@@ -207,7 +256,6 @@ export default function RideBookingForm() {
             />
           </Grid>
         </Grid>
-
         <Button
           onClick={(e) => {
             e.preventDefault();
@@ -223,14 +271,21 @@ export default function RideBookingForm() {
             fontWeight: "bold",
             borderRadius: "25px",
             width: "50%",
+            height: "55px",
             py: 1,
             mx: "auto",
-            display: "block",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             boxShadow: "0px 4px 15px rgba(0, 224, 121, 0.5)",
             "&:hover": { backgroundColor: "#00C96B" },
           }}
         >
-          להזמין נסיעה
+          {loading ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "להזמין נסיעה"
+          )}
         </Button>
       </Box>
     </div>

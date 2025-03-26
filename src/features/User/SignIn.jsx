@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Badge, Email } from "@mui/icons-material";
 import { serverSignIn } from "./userSlice";
+import FormsBackground from "../Pages/FormsBackground";
 
 export default function LoginForm() {
   const dispatch = useDispatch();
@@ -26,7 +27,8 @@ export default function LoginForm() {
   const isFormValid = formData.idNumber && formData.email;
 
   return (
-    <div className="SignInForm">
+    <div className="SignInForm">      
+    <FormsBackground></FormsBackground>
       <Box
         component="form"
         onSubmit={(e) => {

@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { FaShekelSign, FaInfoCircle, FaHeadset, FaUser } from "react-icons/fa";
+import {
+  FaShekelSign,
+  FaInfoCircle,
+  FaHeadset,
+  FaUser,
+  FaSignOutAlt,
+  FaSignInAlt,
+} from "react-icons/fa";
 import NavBar from "./NavBar";
 import "../Styles/Background.css";
 import logoImage from "../../../images/logo.png";
-
+import SignIn from "../User/SignIn"
 import SignUp from "../User/SignUp";
 import Features from "./Features";
 import OurButtons from "./OurButtons";
@@ -16,6 +23,8 @@ export default function Background() {
   const [carPosition, setCarPosition] = useState("100vw");
   const [selectedComponent, setSelectedComponent] = useState(null);
   const [showAll, setShowAll] = useState(true);
+  const [showSignIn, setShowSignIn] = useState(true);
+  const [showSignInComponent, setShowSignInComponent] = useState(false);
   const dispatch = useDispatch();
 
   function parseJwt(token) {
@@ -33,13 +42,9 @@ export default function Background() {
   }
 
   useEffect(() => {
+    //קבלת הטוקן במקרה שהמשתמש מחובר
     const fetchData = async () => {
       const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found in localStorage");
-        return;
-      }
-
       try {
         const userData = await parseJwt(token);
         dispatch(setCurrentUser(userData));
@@ -47,7 +52,10 @@ export default function Background() {
         console.error("Error parsing token:", error);
       }
     };
-fetchData();
+    if (localStorage.getItem("token") != null) {
+      setShowSignIn(true);
+      fetchData();
+    }
     const interval = setInterval(() => {
       setCarPosition((prevPosition) => {
         const currentPosition = parseInt(prevPosition);
@@ -67,15 +75,38 @@ fetchData();
     setSelectedComponent(component);
     setShowAll(false);
   };
+  const handleLogOut = () => {
+    // Add logout logic here if needed
+  };
+  const handleSignIn = () => {
+    setShowSignIn(false);
+    setShowSignInComponent(true); // Show the SignIn component
+  };
 
   return (
     <>
-      {showAll ? (
+      <div className="auth-buttons">
+        {showSignIn ? (
+          <button onClick={handleSignIn} className="auth-button">
+            <FaSignInAlt className="auth-icon" />
+            התחברות
+          </button>
+        ) : (
+          <button onClick={handleLogOut} className="auth-button">
+            <FaSignOutAlt className="auth-icon" />
+            התנתקות
+          </button>
+        )}
+      </div>
+
+      {showSignInComponent ? (
+        <SignIn />
+      ) : showAll ? (
         <>
           <div className="background">
             <div className="green-side"></div>
             <div className="white-side">
-              <NavBar></NavBar>
+              <NavBar />
             </div>
             <img
               src="../../../images/buildings.png"
@@ -98,9 +129,9 @@ fetchData();
             </div>
             <OurButtons onButtonClick={handleComponentChange} />
           </div>
-          <Features></Features>
-          <InfoSections></InfoSections>
-          <Footer></Footer>
+          <Features />
+          <InfoSections />
+          <Footer />
         </>
       ) : (
         <div className="component-container">
