@@ -11,21 +11,21 @@ import {
 import NavBar from "./NavBar";
 import "../Styles/Background.css";
 import logoImage from "../../../images/logo.png";
-import SignIn from "../User/SignIn"
+import SignIn from "../User/SignIn";
 import SignUp from "../User/SignUp";
 import Features from "./Features";
 import OurButtons from "./OurButtons";
 import { setCurrentUser } from "../User/userSlice";
 import InfoSections from "./InfoSections";
 import Footer from "./Footer";
+import { useNavigate } from "react-router-dom";
+import { setshowSignIn } from "./SignInSlice";
 
 export default function Background() {
   const [carPosition, setCarPosition] = useState("100vw");
-  const [selectedComponent, setSelectedComponent] = useState(null);
-  const [showAll, setShowAll] = useState(true);
   const [showSignIn, setShowSignIn] = useState(true);
-  const [showSignInComponent, setShowSignInComponent] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function parseJwt(token) {
     const base64Url = token.split(".")[1];
@@ -53,7 +53,7 @@ export default function Background() {
       }
     };
     if (localStorage.getItem("token") != null) {
-      setShowSignIn(true);
+      dispatch(setShowSignIn(true));
       fetchData();
     }
     const interval = setInterval(() => {
@@ -71,38 +71,20 @@ export default function Background() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleComponentChange = (component) => {
-    setSelectedComponent(component);
-    setShowAll(false);
-  };
+
+ 
   const handleLogOut = () => {
-    // Add logout logic here if needed
+    localStorage.removeItem("token");
+    setShowSignIn(true);
+    navigate("/");
   };
   const handleSignIn = () => {
     setShowSignIn(false);
-    setShowSignInComponent(true); // Show the SignIn component
+    navigate("/SignIn");
   };
 
   return (
-    <>
-      <div className="auth-buttons">
-        {showSignIn ? (
-          <button onClick={handleSignIn} className="auth-button">
-            <FaSignInAlt className="auth-icon" />
-            התחברות
-          </button>
-        ) : (
-          <button onClick={handleLogOut} className="auth-button">
-            <FaSignOutAlt className="auth-icon" />
-            התנתקות
-          </button>
-        )}
-      </div>
-
-      {showSignInComponent ? (
-        <SignIn />
-      ) : showAll ? (
-        <>
+    <>  
           <div className="background">
             <div className="green-side"></div>
             <div className="white-side">
@@ -127,27 +109,13 @@ export default function Background() {
               <h2 className="subtitle">מגלגלים שינוי יחד</h2>
               <div className="underline"></div>
             </div>
-            <OurButtons onButtonClick={handleComponentChange} />
+            <OurButtons/>
           </div>
           <Features />
           <InfoSections />
           <Footer />
         </>
-      ) : (
-        <div className="component-container">
-          <div className="center-container">
-            {/* הודעת אזהרה למשתמש */}
-            <div className="user-alert">
-              לקוח יקר, שים לב! הנך נמצא כעת במערכת ההזמנות והאיזור האישי שלך
-              WHEELSHARE ב
-            </div>
-            {selectedComponent}
-            <button className="back-button" onClick={() => setShowAll(true)}>
-              חזרה לאתר
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
+      
+   
+  );}
+

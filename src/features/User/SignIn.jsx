@@ -12,9 +12,11 @@ import {
 import { Badge, Email } from "@mui/icons-material";
 import { serverSignIn } from "./userSlice";
 import FormsBackground from "../Pages/FormsBackground";
-
+import { setshowSignIn } from "../Pages/SignInSlice";
+import { Navigate, useNavigate } from "react-router-dom";
 export default function LoginForm() {
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     idNumber: "",
@@ -27,8 +29,8 @@ export default function LoginForm() {
   const isFormValid = formData.idNumber && formData.email;
 
   return (
-    <div className="SignInForm">      
-    <FormsBackground></FormsBackground>
+    <div className="SignInForm">
+      <FormsBackground></FormsBackground>
       <Box
         component="form"
         onSubmit={(e) => {
@@ -44,6 +46,8 @@ export default function LoginForm() {
           direction: "rtl",
           boxShadow: "0px 4px 20px rgba(0, 224, 121, 0.5)",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          position: "relative",
+          zIndex: 2,
         }}
       >
         <Typography
@@ -100,6 +104,8 @@ export default function LoginForm() {
           onClick={(e) => {
             e.preventDefault();
             dispatch(serverSignIn(formData));
+            dispatch(setshowSignIn(true));
+            navigate("/")          
           }}
           type="submit"
           variant="contained"
