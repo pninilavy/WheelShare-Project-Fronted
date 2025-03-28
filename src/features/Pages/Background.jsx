@@ -53,7 +53,7 @@ export default function Background() {
       }
     };
     if (localStorage.getItem("token") != null) {
-      dispatch(setShowSignIn(true));
+      dispatch(setshowSignIn(true));
       fetchData();
     }
     const interval = setInterval(() => {
@@ -73,15 +73,7 @@ export default function Background() {
 
 
  
-  const handleLogOut = () => {
-    localStorage.removeItem("token");
-    setShowSignIn(true);
-    navigate("/");
-  };
-  const handleSignIn = () => {
-    setShowSignIn(false);
-    navigate("/SignIn");
-  };
+
 
   return (
     <>  

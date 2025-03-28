@@ -21,7 +21,7 @@ export default function OurButtons() {
          setShowMessage(false); 
     };
     const handleSignIn=()=>{
-      navigate("/SignUp");
+      navigate("/SignIn");
       setShowMessage(false); 
     }
   const checkAbility = () => {

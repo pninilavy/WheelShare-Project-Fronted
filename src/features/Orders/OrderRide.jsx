@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import "../Styles/OrderRide.css"; // Adjust the path if necessary
@@ -18,14 +18,46 @@ import {
 } from "@mui/material";
 import { People, LocationOn, Home } from "@mui/icons-material";
 import FormsBackground from "../Pages/FormsBackground";
-
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "../User/userSlice";
 function SlideTransition(props) {
   return <Slide {...props} direction="down" />;
 }
 
 export default function RideBookingForm() {
+  const dispatch=useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
+    function parseJwt(token) {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    }
+  
+    useEffect(() => {
+      //קבלת הטוקן במקרה שהמשתמש מחובר
+      const fetchData =  () => {
+        const token = localStorage.getItem("token");
+        try {
+          const userData =  parseJwt(token);
+          dispatch(setCurrentUser(userData));
+        } catch (error) {
+          console.error("Error parsing token:", error);
+        }
+      };
+   
+        fetchData();
+      
+  
 
+    }, []);
   // מצב טעינה והודעה
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
