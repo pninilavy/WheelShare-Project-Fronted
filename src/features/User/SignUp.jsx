@@ -13,21 +13,20 @@ import {
   Snackbar,
   Alert,
   Slide,
-  CircularProgress,
+  FormHelperText,
 } from "@mui/material";
 import { AccountCircle, Email, Phone, Badge, Wc } from "@mui/icons-material";
 import { serverSignUp } from "./userSlice";
 import FormsBackground from "../Pages/FormsBackground";
 import { resetStatus } from "./userSlice";
+
 function SlideTransition(props) {
   return <Slide {...props} direction="down" />;
 }
 
 export default function SignUpForm() {
   const dispatch = useDispatch();
-  const { signUpStatus, signUpMessage, showSignUpSnackbar } = useSelector(
-    (state) => state.user
-  );
+  const { signUpStatus, signUpMessage } = useSelector((state) => state.user);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -37,36 +36,54 @@ export default function SignUpForm() {
     idNumber: "",
     gender: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [idError, setIdError] = useState("");
+
   useEffect(() => {
     dispatch(resetStatus());
   }, [dispatch]);
- 
-useEffect(() => {
-  if (
-    signUpStatus &&
-    (signUpStatus === "failed" || signUpStatus === "success")
-  ) {
-    setOpenSnackbar(true);
-  }
-}, [signUpStatus]);
+
+  useEffect(() => {
+    if (
+      signUpStatus &&
+      (signUpStatus === "failed" || signUpStatus === "success")
+    ) {
+      setOpenSnackbar(true);
+    }
+  }, [signUpStatus]);
+
+  const isValidIdNumber = (idNumber) => {
+    const regex = /^[1-9]{1}[0-9]{8}$/;
+    return regex.test(idNumber);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "idNumber" && !isValidIdNumber(e.target.value)) {
+      setIdError("מספר תעודת הזהות אינו תקין");
+    } else {
+      setIdError("");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (idError) {
+      return;
+    }
+
+    setIsSubmitting(true);
     dispatch(serverSignUp(formData));
-     
   };
 
- const handleCloseSnackbar = () => {
-   setOpenSnackbar(false);
-   setTimeout(() => {
-     if (signUpStatus !== "pending") {
-       dispatch(resetStatus());
-     }
-   }, 300);
- };
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+    setTimeout(() => {
+      if (signUpStatus !== "pending") {
+        dispatch(resetStatus());
+      }
+    }, 300);
+  };
 
   return (
     <div className="SignUpForm">
@@ -143,6 +160,9 @@ useEffect(() => {
                   }}
                   InputLabelProps={{ sx: { color: "#00E079" } }}
                 />
+                {name === "idNumber" && idError && (
+                  <FormHelperText error>{idError}</FormHelperText>
+                )}
               </Grid>
             )
           )}
@@ -197,13 +217,9 @@ useEffect(() => {
             boxShadow: "0px 4px 15px rgba(0, 224, 121, 0.5)",
             "&:hover": { backgroundColor: "#00C96B" },
           }}
-          disabled={signUpStatus === "pending"}
+          disabled={!!idError} 
         >
-          {signUpStatus === "pending" ? (
-            <CircularProgress size={24} sx={{ color: "white" }} />
-          ) : (
-            "אני רוצה להירשם"
-          )}
+          אני רוצה להירשם
         </Button>
       </Box>
 
@@ -228,8 +244,8 @@ useEffect(() => {
             position: "relative",
           }}
         >
-          {signUpMessage ||
-            (signUpStatus === "success" ? "ההרשמה הצליחה!" : "קרתה תקלה")}
+          {signUpMessage?.message ||
+            (signUpStatus === "success" ? "נרשמת בהצלחה!" : "קרתה תקלה")}
 
           <Box
             component="span"
@@ -248,7 +264,7 @@ useEffect(() => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: "50%", 
+              borderRadius: "50%",
               transition: "all 0.3s ease-in-out",
               "&:hover": {
                 backgroundColor: "rgba(255, 255, 255, 0.3)",

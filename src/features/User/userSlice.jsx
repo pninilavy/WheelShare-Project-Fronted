@@ -14,7 +14,9 @@ export const serverSignUp = createAsyncThunk(
       if (!data) {
         return thunkApi.rejectWithValue("המשתמש כבר קיים במערכת");
       }
-      return data;
+       if (data?.message) {
+        return data; 
+       }
     } catch (error) {
       return thunkApi.rejectWithValue(error.response?.data || "קרתה תקלה");
     }
