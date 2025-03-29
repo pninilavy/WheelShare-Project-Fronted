@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "../Styles/SignIn.css";
 import {
   TextField,
@@ -8,35 +9,65 @@ import {
   Typography,
   InputAdornment,
   Grid,
+  Snackbar,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import { Badge, Email } from "@mui/icons-material";
-import { serverSignIn } from "./userSlice";
+import { serverSignIn, resetStatus } from "./userSlice";
 import FormsBackground from "../Pages/FormsBackground";
 import { setshowSignIn } from "../Pages/SignInSlice";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function LoginForm() {
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const { signInStatus, signInMessage } = useSelector((state) => state.user);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     idNumber: "",
   });
 
+  useEffect(() => {
+    dispatch(resetStatus());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      signInStatus &&
+      (signInStatus === "failed" || signInStatus === "success")
+    ) {
+      setOpenSnackbar(true);
+    }
+  }, [signInStatus]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(serverSignIn(formData));
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+    setTimeout(() => {
+      if (signInStatus !== "pending") {
+        dispatch(resetStatus());
+      }
+    }, 300);
   };
 
   const isFormValid = formData.idNumber && formData.email;
 
   return (
     <div className="SignInForm">
-      <FormsBackground></FormsBackground>
+      <FormsBackground />
       <Box
         component="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          dispatch(serverSignIn(formData));
-        }}
+        onSubmit={handleSubmit}
         sx={{
           maxWidth: 600,
           mx: "auto",
@@ -58,7 +89,7 @@ export default function LoginForm() {
           color="#00E079"
           padding="15px"
         >
-          Sign In
+          התחברות
         </Typography>
 
         <Grid container spacing={2}>
@@ -74,7 +105,7 @@ export default function LoginForm() {
                 value={formData[name]}
                 onChange={handleChange}
                 fullWidth
-                required={false}
+                required
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start" sx={{ color: "#00E079" }}>
@@ -92,21 +123,13 @@ export default function LoginForm() {
                     },
                   },
                 }}
-                InputLabelProps={{
-                  sx: { color: "#00E079" },
-                }}
+                InputLabelProps={{ sx: { color: "#00E079" } }}
               />
             </Grid>
           ))}
         </Grid>
 
         <Button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(serverSignIn(formData));
-            dispatch(setshowSignIn(true));
-            navigate("/")          
-          }}
           type="submit"
           variant="contained"
           sx={{
@@ -123,11 +146,69 @@ export default function LoginForm() {
             boxShadow: "0px 4px 15px rgba(0, 224, 121, 0.5)",
             "&:hover": { backgroundColor: "#00C96B" },
           }}
-          disabled={!isFormValid}
+          disabled={signInStatus === "pending" || !isFormValid}
         >
-          התחברות
+          {signInStatus === "pending" ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "התחברות"
+          )}
         </Button>
       </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        sx={{ width: "100%" }}
+      >
+        <Alert
+          severity={signInStatus === "failed" ? "error" : "success"}
+          sx={{
+            fontSize: "18px",
+            p: 2,
+            width: "350px",
+            textAlign: "right",
+            direction: "rtl",
+            backgroundColor: signInStatus === "success" ? "#68e098" : "#ffc7c7",
+            color: "white",
+            position: "relative",
+          }}
+        >
+          {signInMessage ||
+            (signInStatus === "success" ? "ההתחברות הצליחה!" : "קרתה תקלה")}
+
+          <Box
+            component="span"
+            onClick={handleCloseSnackbar}
+            sx={{
+              position: "absolute",
+              left: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              color: "white",
+              fontSize: "20px",
+              fontWeight: "bold",
+              width: "30px",
+              height: "30px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              transition: "all 0.3s ease-in-out",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.3)",
+                border: "1px solid white",
+              },
+            }}
+          >
+            ✖
+          </Box>
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
+

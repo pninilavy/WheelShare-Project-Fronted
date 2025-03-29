@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import "../Styles/SignUp.css"
+
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "../Styles/SignUp.css";
 import {
   TextField,
   Button,
@@ -9,20 +10,25 @@ import {
   Typography,
   InputAdornment,
   Grid,
+  Snackbar,
+  Alert,
+  Slide,
+  CircularProgress,
 } from "@mui/material";
-import {
-  AccountCircle,
-  Email,
-  Phone,
-  Badge,
-  Wc,
-  Payment,
-} from "@mui/icons-material";
+import { AccountCircle, Email, Phone, Badge, Wc } from "@mui/icons-material";
 import { serverSignUp } from "./userSlice";
 import FormsBackground from "../Pages/FormsBackground";
+import { resetStatus } from "./userSlice";
+function SlideTransition(props) {
+  return <Slide {...props} direction="down" />;
+}
 
 export default function SignUpForm() {
   const dispatch = useDispatch();
+  const { signUpStatus, signUpMessage, showSignUpSnackbar } = useSelector(
+    (state) => state.user
+  );
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,22 +36,41 @@ export default function SignUpForm() {
     email: "",
     idNumber: "",
     gender: "",
-    rides: [],
-    payment: [],
   });
-
+  useEffect(() => {
+    dispatch(resetStatus());
+  }, [dispatch]);
+ 
+useEffect(() => {
+  if (
+    signUpStatus &&
+    (signUpStatus === "failed" || signUpStatus === "success")
+  ) {
+    setOpenSnackbar(true);
+  }
+}, [signUpStatus]);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+    dispatch(serverSignUp(formData));
+     
   };
+
+ const handleCloseSnackbar = () => {
+   setOpenSnackbar(false);
+   setTimeout(() => {
+     if (signUpStatus !== "pending") {
+       dispatch(resetStatus());
+     }
+   }, 300);
+ };
 
   return (
     <div className="SignUpForm">
-      <FormsBackground></FormsBackground>
+      <FormsBackground />
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -59,7 +84,7 @@ export default function SignUpForm() {
           boxShadow: "0px 4px 20px rgba(0, 224, 121, 0.5)",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
           position: "relative",
-          zIndex: 2,         
+          zIndex: 2,
         }}
       >
         <Typography
@@ -70,49 +95,57 @@ export default function SignUpForm() {
           color="#00E079"
           padding="15px"
         >
-          Sign Up
+          הרשמה
         </Typography>
 
         <Grid container spacing={2}>
-          {[
-            { label: "שם פרטי", name: "firstName", icon: <AccountCircle /> },
-            { label: "שם משפחה", name: "lastName", icon: <AccountCircle /> },
-            { label: "מספר טלפון", name: "phoneNumber", icon: <Phone /> },
-            { label: "מייל", name: "email", type: "email", icon: <Email /> },
-            { label: "מספר זהות", name: "idNumber", icon: <Badge /> },
-          ].map(({ label, name, type = "text", icon }) => (
-            <Grid item xs={12} sm={6} key={name}>
-              <TextField
-                label={label}
-                name={name}
-                type={type}
-                value={formData[name]}
-                onChange={handleChange}
-                fullWidth
-                required:false="true"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" sx={{ color: "#00E079" }}>
-                      {icon}
-                    </InputAdornment>
-                  ),
-                  sx: {
-                    borderRadius: "25px",
-                    backgroundColor: "#F5F5F5",
-                    fontSize: "16px",
-                    height: "55px",
-                    color: "gray",
-                    "&:focus-within fieldset": {
-                      borderColor: "#00E079 !important",
+          {["firstName", "lastName", "phoneNumber", "email", "idNumber"].map(
+            (name, index) => (
+              <Grid item xs={12} sm={6} key={name}>
+                <TextField
+                  label={
+                    ["שם פרטי", "שם משפחה", "מספר טלפון", "מייל", "מספר זהות"][
+                      index
+                    ]
+                  }
+                  name={name}
+                  type={name === "email" ? "email" : "text"}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment
+                        position="start"
+                        sx={{ color: "#00E079" }}
+                      >
+                        {
+                          [
+                            <AccountCircle />,
+                            <AccountCircle />,
+                            <Phone />,
+                            <Email />,
+                            <Badge />,
+                          ][index]
+                        }
+                      </InputAdornment>
+                    ),
+                    sx: {
+                      borderRadius: "25px",
+                      backgroundColor: "#F5F5F5",
+                      fontSize: "16px",
+                      height: "55px",
+                      "&:focus-within fieldset": {
+                        borderColor: "#00E079 !important",
+                      },
                     },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: { color: "#00E079" },
-                }}
-              />
-            </Grid>
-          ))}
+                  }}
+                  InputLabelProps={{ sx: { color: "#00E079" } }}
+                />
+              </Grid>
+            )
+          )}
 
           <Grid item xs={12} sm={6}>
             <TextField
@@ -122,7 +155,7 @@ export default function SignUpForm() {
               value={formData.gender}
               onChange={handleChange}
               fullWidth
-              required:false="true"
+              required
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start" sx={{ color: "#00E079" }}>
@@ -139,9 +172,7 @@ export default function SignUpForm() {
                   },
                 },
               }}
-              InputLabelProps={{
-                sx: { color: "#00E079" },
-              }}
+              InputLabelProps={{ sx: { color: "#00E079" } }}
             >
               <MenuItem value="male">זכר</MenuItem>
               <MenuItem value="female">נקבה</MenuItem>
@@ -150,10 +181,6 @@ export default function SignUpForm() {
         </Grid>
 
         <Button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(serverSignUp(formData));
-          }}
           type="submit"
           variant="contained"
           sx={{
@@ -170,10 +197,69 @@ export default function SignUpForm() {
             boxShadow: "0px 4px 15px rgba(0, 224, 121, 0.5)",
             "&:hover": { backgroundColor: "#00C96B" },
           }}
+          disabled={signUpStatus === "pending"}
         >
-          אני רוצה להירשם
+          {signUpStatus === "pending" ? (
+            <CircularProgress size={24} sx={{ color: "white" }} />
+          ) : (
+            "אני רוצה להירשם"
+          )}
         </Button>
       </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        TransitionComponent={SlideTransition}
+        sx={{ width: "100%" }}
+      >
+        <Alert
+          severity={signUpStatus === "failed" ? "error" : "success"}
+          sx={{
+            fontSize: "18px",
+            p: 2,
+            width: "350px",
+            textAlign: "right",
+            direction: "rtl",
+            backgroundColor: signUpStatus === "success" ? "#68e098" : "#ffc7c7",
+            color: "white",
+            position: "relative",
+          }}
+        >
+          {signUpMessage ||
+            (signUpStatus === "success" ? "ההרשמה הצליחה!" : "קרתה תקלה")}
+
+          <Box
+            component="span"
+            onClick={handleCloseSnackbar}
+            sx={{
+              position: "absolute",
+              left: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              color: "white",
+              fontSize: "20px",
+              fontWeight: "bold",
+              width: "30px",
+              height: "30px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%", 
+              transition: "all 0.3s ease-in-out",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.3)",
+                border: "1px solid white",
+              },
+            }}
+          >
+            ✖
+          </Box>
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

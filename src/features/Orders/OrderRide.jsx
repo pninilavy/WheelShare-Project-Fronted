@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import "../Styles/OrderRide.css"; // Adjust the path if necessary
+import "../Styles/OrderRide.css"; 
 import {
   TextField,
   Button,
@@ -159,13 +159,13 @@ export default function RideBookingForm() {
             fontSize: "18px",
             p: 2,
             width: "350px",
-            textAlign: "right", // מיושר לימין
+            textAlign: "center", 
             backgroundColor:
               snackbarSeverity === "success"
-                ? "#68e098" // ירוק בהיר
+                ? "#68e098" 
                 : snackbarSeverity === "error"
                   ? "#ffc7c7"
-                  : "#ffc7c7", // אדום בהיר או אפור למקרים אחרים
+                  : "#ffc7c7", 
             color: "white",
           }}
         >

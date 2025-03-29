@@ -1,20 +1,27 @@
-import { Cookie } from "@mui/icons-material";
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { useEffect } from "react";
 
+// פעולה להרשמה
 export const serverSignUp = createAsyncThunk(
   "user-SignUp",
   async (user, thunkApi) => {
-    let { data } = await axios.post(
-      "https://localhost:7249/api/User/SignUp",
-      user
-    );
-    console.log(data);
-    return data;
+    try {
+      let { data } = await axios.post(
+        "https://localhost:7249/api/User/SignUp",
+        user
+      );
+      if (!data) {
+        return thunkApi.rejectWithValue("המשתמש כבר קיים במערכת");
+      }
+      return data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data || "קרתה תקלה");
+    }
   }
 );
- 
+
+// פעולה להתחברות
 export const serverSignIn = createAsyncThunk(
   "user-SignIn",
   async (user, thunkApi) => {
@@ -23,16 +30,12 @@ export const serverSignIn = createAsyncThunk(
         "https://localhost:7249/api/User/SignIn",
         user
       );
-      console.log(data);
       if (data) {
-        localStorage.setItem("token", data.token);
-      } else {
-        console.log("Token not received:", data);
+        localStorage.setItem("token", data.token); 
       }
       return data;
     } catch (error) {
-      console.error("Error during SignIn:", error);
-      throw error;
+      return thunkApi.rejectWithValue(error.response?.data || "קרתה תקלה");
     }
   }
 );
@@ -41,52 +44,81 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     currentUser: null,
-    status: null,
-    message: "",
+    signUpStatus: "idle",
+    signInStatus: "idle", 
+    signUpMessage: "", 
+    signInMessage: "",
+    showSignUpSnackbar: false, 
+    showSignInSnackbar: false, 
   },
   reducers: {
     setCurrentUser: (state, action) => {
       state.currentUser = action.payload;
-      console.log(state.currentUser);
+    },
+    resetStatus: (state) => {
+      state.signUpStatus = "idle";
+      state.signInStatus = "idle";
+      state.signUpMessage = "";
+      state.signInMessage = "";
+      state.showSignUpSnackbar = false;
+      state.showSignInSnackbar = false;
+    },
+  
+
+    resetMessages: (state) => {
+      state.signUpStatus = "idle";
+      state.signInStatus = "idle";
+      state.signUpMessage = "";
+      state.signInMessage = "";
+      state.showSignUpSnackbar = false;
+      state.showSignInSnackbar = false;
     },
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(serverSignIn.fulfilled, (state, action) => {
-        state.currentUser = action.payload;
-      })
-
-      .addCase(serverSignIn.rejected, (state, action) => {
-        state.currentUser = action.payload;
-        state.status = "failed";
-        state.message = "קרתה תקלה בהתחברות";
-      })
-
-      .addCase(serverSignIn.pending, (state, action) => {
-        state.currentUser = action.payload;
-        state.status = "pending";
-        state.message = "...בטעינה";
-      })
-
+      // הרשמה הצלחה
       .addCase(serverSignUp.fulfilled, (state, action) => {
         state.currentUser = action.payload;
-        console.log("הצליח");
+        state.signUpStatus = "success";
+        state.signUpMessage = "ההרשמה בוצעה בהצלחה!";
+        state.showSignUpSnackbar = true;
+      })
+      // הרשמה כישלון
+      .addCase(serverSignUp.rejected, (state, action) => {
+        state.signUpStatus = "failed";
+        state.signUpMessage = action.payload || "קרתה תקלה ביצירת משתמש חדש";
+        state.showSignUpSnackbar = true;
+      })
+      // הרשמה בהמתנה
+      .addCase(serverSignUp.pending, (state) => {
+        state.signUpStatus = "pending";
+        state.signUpMessage = "...נרשם";
+        state.showSignUpSnackbar = false;
       })
 
-      .addCase(serverSignUp.rejected, (state, action) => {
+      // התחברות הצלחה
+      .addCase(serverSignIn.fulfilled, (state, action) => {
         state.currentUser = action.payload;
-        state.status = "failed";
-        state.message = "קרתה תקלה ביצירת משתמש חדש";
-        console.log("תקלה");
+        state.signInStatus = "success";
+        state.signInMessage = "התחברת בהצלחה!";
+        state.showSignInSnackbar = true;
       })
-      .addCase(serverSignUp.pending, (state, action) => {
-        state.currentUser = action.payload;
-        state.status = "pending";
-        state.message = "...בטעינה";
+      // התחברות כישלון
+      .addCase(serverSignIn.rejected, (state, action) => {
+        state.signInStatus = "failed";
+        state.signInMessage = action.payload || "קרתה תקלה בהתחברות";
+        state.showSignInSnackbar = true;
+      })
+      // התחברות בהמתנה
+      .addCase(serverSignIn.pending, (state) => {
+        state.signInStatus = "pending";
+        state.signInMessage = "...מתחבר";
+        state.showSignInSnackbar = false;
       });
   },
 });
-export const { setCurrentUser } = userSlice.actions;
-export default userSlice.reducer;
 
+export const { setCurrentUser, resetMessages,resetStatus } = userSlice.actions;
+
+export default userSlice.reducer;
