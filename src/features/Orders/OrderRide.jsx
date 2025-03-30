@@ -1,7 +1,8 @@
-import React, { useState,useEffect } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import "../Styles/OrderRide.css"; 
+import "../Styles/OrderRide.css";
 import {
   TextField,
   Button,
@@ -20,45 +21,44 @@ import { People, LocationOn, Home } from "@mui/icons-material";
 import FormsBackground from "../Pages/FormsBackground";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../User/userSlice";
+import Autocomplete from "./AutoComplete"; // import the Autocomplete component
+
 function SlideTransition(props) {
   return <Slide {...props} direction="down" />;
 }
 
 export default function RideBookingForm() {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
-    function parseJwt(token) {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map(function (c) {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join("")
-      );
-      return JSON.parse(jsonPayload);
-    }
-  
-    useEffect(() => {
-      //קבלת הטוקן במקרה שהמשתמש מחובר
-      const fetchData =  () => {
-        const token = localStorage.getItem("token");
-        try {
-          const userData =  parseJwt(token);
-          dispatch(setCurrentUser(userData));
-        } catch (error) {
-          console.error("Error parsing token:", error);
-        }
-      };
-   
-        fetchData();
-      
-  
 
-    }, []);
-  // מצב טעינה והודעה
+  function parseJwt(token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  }
+
+  useEffect(() => {
+    const fetchData = () => {
+      const token = localStorage.getItem("token");
+      try {
+        const userData = parseJwt(token);
+        dispatch(setCurrentUser(userData));
+      } catch (error) {
+        console.error("Error parsing token:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [message, setMessage] = useState("");
@@ -71,10 +71,10 @@ export default function RideBookingForm() {
     destinationStationID: null,
     sourceAddress: "",
     destinationAddress: "",
-    sourceLatitude:0,
-    sourceLongitude:0, 
-    destinationLatitude:0,
-    destinationLongitude:0,
+    sourceLatitude: 0,
+    sourceLongitude: 0,
+    destinationLatitude: 0,
+    destinationLongitude: 0,
     date: "",
     startTime: "",
     endTime: "",
@@ -143,33 +143,57 @@ export default function RideBookingForm() {
   return (
     <div className="OrderRideForm">
       <FormsBackground />
-      {/* הודעה מוצגת למעלה במרכז */}
       <Snackbar
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={() => setOpenSnackbar(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         TransitionComponent={SlideTransition}
         sx={{ width: "100%" }}
       >
         <Alert
-          onClose={() => setOpenSnackbar(false)}
           severity={snackbarSeverity}
           sx={{
             fontSize: "18px",
             p: 2,
             width: "350px",
-            textAlign: "center", 
+            textAlign: "right",
+            direction: "rtl",
             backgroundColor:
-              snackbarSeverity === "success"
-                ? "#68e098" 
-                : snackbarSeverity === "error"
-                  ? "#ffc7c7"
-                  : "#ffc7c7", 
+              snackbarSeverity === "success" ? "#68e098" : "#ffc7c7",
             color: "white",
+            position: "relative",
           }}
         >
           {message}
+
+          <Box
+            component="span"
+            onClick={() => setOpenSnackbar(false)}
+            sx={{
+              position: "absolute",
+              left: 10,
+              top: "50%",
+              transform: "translateY(-50%)",
+              cursor: "pointer",
+              color: "white",
+              fontSize: "20px",
+              fontWeight: "bold",
+              width: "30px",
+              height: "30px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              transition: "all 0.3s ease-in-out",
+              "&:hover": {
+                backgroundColor: "rgba(255, 255, 255, 0.3)",
+                border: "1px solid white",
+              },
+            }}
+          >
+            ✖
+          </Box>
         </Alert>
       </Snackbar>
       <Box
@@ -240,43 +264,28 @@ export default function RideBookingForm() {
               />
             </Grid>
           ))}
-          {[
-            { label: "כתובת מוצא", name: "sourceAddress", icon: <Home /> },
-            {
-              label: "כתובת יעד",
-              name: "destinationAddress",
-              icon: <LocationOn />,
-            },
-          ].map(({ label, name, icon }) => (
-            <Grid item xs={12} key={name}>
-              <TextField
-                label={label}
-                name={name}
-                value={formData[name]}
-                onChange={handleChange}
-                fullWidth
-                required
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start" sx={{ color: "#00E079" }}>
-                      {icon}
-                    </InputAdornment>
-                  ),
-                  sx: {
-                    borderRadius: "25px",
-                    backgroundColor: "#F5F5F5",
-                    fontSize: "16px",
-                    height: "55px",
-                    color: "gray",
-                    "&:focus-within fieldset": {
-                      borderColor: "#00E079 !important",
-                    },
-                  },
-                }}
-                InputLabelProps={{ sx: { color: "#00E079" } }}
-              />
-            </Grid>
-          ))}
+          <Grid item xs={12} sm={12}>
+            <Typography variant="subtitle1" color="#00E079">
+              כתובת מוצא{" "}
+            </Typography>
+            <Autocomplete
+              onSelect={(address) =>
+                setFormData({ ...formData, sourceAddress: address })
+              }
+              type="sourceAddress"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Typography variant="subtitle1" color="#00E079">
+              כתובת יעד{" "}
+            </Typography>
+            <Autocomplete
+              onSelect={(address) =>
+                setFormData({ ...formData, destinationAddress: address })
+              }
+              type="destinationAddress"
+            />
+          </Grid>
           <Grid item xs={12}>
             <FormControlLabel
               control={

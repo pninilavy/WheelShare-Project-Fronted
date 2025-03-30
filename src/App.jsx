@@ -10,7 +10,6 @@ import OrderRide from "./features/Orders/OrderRide";
 import Background from "./features/Pages/Background";
 import Features from "./features/Pages/Features";
 import SignInAndLogOut from "./features/Pages/SignInAndLogOut";
-
 function App() {
   const [count, setCount] = useState(0);
 
