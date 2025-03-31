@@ -108,7 +108,7 @@ export default function RideBookingForm() {
         "https://localhost:7249/api/Ride",
         updatedFormData
       );
-      if (data === null) {
+      if (!data) {
         setMessage("מצטערים, אין רכב פנוי");
         setSnackbarSeverity("error");
       } else {
