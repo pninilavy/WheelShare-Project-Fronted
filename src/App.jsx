@@ -10,6 +10,11 @@ import OrderRide from "./features/Orders/OrderRide";
 import Background from "./features/Pages/Background";
 import Features from "./features/Pages/Features";
 import SignInAndLogOut from "./features/Pages/SignInAndLogOut";
+import Pricing from "./features/Pages/Pricing";
+import OurButtons from "./features/Pages/OurButtons";
+import Footer from "./features/Pages/Footer"
+import ContactSection from "./features/Pages/ContactSection";
+import RideShareInfoPage from "./features/Pages/RideShareInfoPage"
 function App() {
   const [count, setCount] = useState(0);
 
@@ -22,6 +27,9 @@ function App() {
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/OrderRide" element={<OrderRide />} />
         <Route path="/Features" element={<Features />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/contact" element={<ContactSection />} />
+        <Route path="/guide" element={<RideShareInfoPage />} />
       </Routes>
 
       <SignInAndLogOut />

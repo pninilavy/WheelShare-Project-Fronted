@@ -94,14 +94,13 @@ export default function Background() {
               style={{ left: carPosition }}
               alt="car"
             />
-
+<OurButtons></OurButtons>
             {/* כותרת עם שם וסלוגן */}
             <div className="header">
               <h1 className="title">WHEELSHARE</h1>
               <h2 className="subtitle">מגלגלים שינוי יחד</h2>
               <div className="underline"></div>
             </div>
-            <OurButtons/>
           </div>
           <Features />
           <InfoSections />

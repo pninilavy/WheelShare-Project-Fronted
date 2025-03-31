@@ -8,6 +8,7 @@
   margin: 2% auto;
   width: 100%;
   margin-top: 85vh;
+  direction: ltr;
 }
 .card-container {
   width: 20%;
@@ -78,4 +79,7 @@ h1 {
   100% {
     width: 14%;
   }
+}
+h3{
+  font-size:x-large;
 }

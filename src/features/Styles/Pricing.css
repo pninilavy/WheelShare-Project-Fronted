@@ -1,0 +1,88 @@
+/* מבנה כללי של הדף */
+.pricing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* החלק העליון עם התמונה והכותרת */
+.pricing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 100vw;
+  text-align: right; /* מבטיח שהתמונה תהיה בצד ימין */
+}
+/* התמונה בצד ימין */
+.tariff-image {
+  width: 500px; /* הגדלה של התמונה, תוכל לשנות את זה בהתאם לגודל הרצוי */
+  height: auto;
+  margin-right: 10%;
+}
+
+.pricing-title {
+  text-align: left;
+  margin-left: 10%;
+}
+
+.pricing-title h1 {
+  font-size: 60px;
+  margin: 0;
+  color: #333;
+  margin-left: 15%;
+}
+
+/* קו אנימציה מתחת לכותרת */
+.animated-line {
+  width: 100px;
+  height: 4px;
+  background-color: #f50057;
+  margin-top: 5px;
+  animation: slide-in 1s ease-in-out infinite alternate;
+  margin-left: 15%;
+}
+
+/* אנימציה של הקו */
+@keyframes slide-in {
+  from {
+    width: 50px;
+  }
+  to {
+    width: 120px;
+  }
+}
+
+/* קונטיינר עם הכרטיסים */
+.pricing-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  margin: 50px;
+  width: 100vw;
+}
+
+header {
+  background-color: #00e079;
+  width: 100vw;
+  height: 15vh;
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  padding: 0 80%;
+}
+
+.logo-image {
+  width: 140px;
+  height: auto;
+  cursor: pointer;
+}
+.pricing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+
+  box-sizing: border-box;
+}

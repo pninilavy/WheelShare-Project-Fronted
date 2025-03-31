@@ -10,16 +10,13 @@ export default function NavBar() {
         </a>
         <a href="/guide" className="sidebar-item">
           <FaInfoCircle className="icon" />
-          <span>מדריך</span>
+          <span>קצת עלינו</span>
         </a>
         <a href="/contact" className="sidebar-item">
           <FaHeadset className="icon" />
           <span>צור קשר</span>
         </a>
-        <a href="/profile" className="sidebar-item">
-          <FaUser className="icon" />
-          <span>אזור אישי</span>
-        </a>
+      
       </div>
     </>
   );

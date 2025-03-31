@@ -6,6 +6,7 @@
   background: #000623; 
   color: white;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: -2;
 }
 
 .footer-left p {

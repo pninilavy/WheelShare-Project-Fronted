@@ -5,7 +5,7 @@ const Card = ({ image, title, text }) => {
   return (
     <div className="card">
       <img src={image} alt="card" className="image" />
-      <h2 className="card-title">{title}</h2>
+      <h3 className="card-title">{title}</h3>
       <p className="text">{text}</p>
     </div>
   );
@@ -22,7 +22,7 @@ const Features = () => {
           <Card
             image="../../../images/featureWheel.png"
             title="ונוסעים משתלם יותר"
-            text="?איך נוסעים פותחים את הרכב באמצעות קוד בקודנית המותקנת ברכב או באפליקציה"
+            text="איך נוסעים? פותחים את הרכב באמצעות קוד בקודנית המותקנת ברכב או באפליקציה"
           />
         </div>
 
@@ -30,14 +30,14 @@ const Features = () => {
           <Card
             image="../../../images/featureComputer.png"
             title="מזמינים רכב קרוב"
-            text="?איך מזמינים בקלות ובמהירות דרך מערכת חכמה באתר, באפליקציה או בטלפון"
+            text="איך מזמינים? בקלות ובמהירות דרך מערכת חכמה באתר, באפליקציה או בטלפון"
           />
         </div>
         <div className="card-container">
           <Card
             image="../../../images/featureCar.png"
             title="מצטרפים לשירות"
-            text="?איך מצטרפים תהליך הרשמה פשוט וקל במגוון ערוצים לבחירתכם: כאן באתר, באפליקציה או בטלפון"
+            text="איך מצטרפים? תהליך הרשמה פשוט וקל במגוון ערוצים לבחירתכם: כאן באתר, באפליקציה או בטלפון"
           />
         </div>
       </div>
