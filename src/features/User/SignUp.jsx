@@ -52,10 +52,10 @@ export default function SignUpForm() {
     }
   }, [signUpStatus]);
 
-  const isValidIdNumber = (idNumber) => {
-    const regex = /^[1-9]{1}[0-9]{8}$/;
-    return regex.test(idNumber);
-  };
+const isValidIdNumber = (idNumber) => {
+  const regex = /^[0-9]{9}$/;
+  return regex.test(idNumber);
+};
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
