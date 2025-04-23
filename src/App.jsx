@@ -51,21 +51,20 @@ import RideShareInfoPage from "./features/Pages/RideShareInfoPage";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Background />} />
+<>      <Routes>
+        <Route path="/"           element={<Background />} />
         <Route path="/background" element={<Background />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/orderride" element={<OrderRide />} />
-        <Route path="/features" element={<Features />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/contact" element={<ContactSection />} />
-        <Route path="/guide" element={<RideShareInfoPage />} />
+        <Route path="/signup"     element={<SignUp />} />
+        <Route path="/signin"     element={<SignIn />} />
+        <Route path="/orderride"  element={<OrderRide />} />
+        <Route path="/features"   element={<Features />} />
+        <Route path="/pricing"    element={<Pricing />} />
+        <Route path="/contact"    element={<ContactSection />} />
+        <Route path="/guide"      element={<RideShareInfoPage />} />
       </Routes>
 
       <SignInAndLogOut />
-    </Router>
+    </>
   );
 }
 
