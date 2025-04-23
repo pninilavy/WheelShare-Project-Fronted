@@ -27,7 +27,7 @@ export default function Pricing() {
 
       <div className="pricing-container">
         <CommercialCarCard
-          carImage={"/images/car.png"}
+          carImage="/images/car.png"
           hourlyRate={"12.9  ₪"}
           dailyRate={"180  ₪"}
           seats={"5"}
@@ -35,7 +35,7 @@ export default function Pricing() {
           carName={"רכב קטן"}
         ></CommercialCarCard>
         <CommercialCarCard
-          carImage={"/images/car2.png"}
+          carImage="/images/car2.png"
           hourlyRate={"19.9  ₪"}
           dailyRate={"230  ₪"}
           seats={"7"}
@@ -43,7 +43,7 @@ export default function Pricing() {
           carName={"רכב 7 מקומות"}
         ></CommercialCarCard>
         <CommercialCarCard
-          carImage={"/images/car3.png"}
+          carImage="/images/car3.png"
           hourlyRate={"12.9  ₪"}
           dailyRate={"180  ₪"}
           seats={"5"}
@@ -51,7 +51,7 @@ export default function Pricing() {
           carName={"רכב משפחתי"}
         ></CommercialCarCard>
         <CommercialCarCard
-          carImage={"/images/autocar.png"}
+          carImage="/images/autocar.png"
           hourlyRate={"12.9  ₪"}
           dailyRate={"180  ₪"}
           seats={"5"}
