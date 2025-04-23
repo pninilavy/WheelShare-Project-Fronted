@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import buttonImage1 from "../../../images/button1.png";
-import buttonImage2 from "../../../images/button2.png";
+import buttonImage1 from "/images/button1.png";
+import buttonImage2 from "/images/button2.png";
 import "../Styles/OurButtons.css";
 import SignUp from "../User/SignUp";
 import SignIn from "../User/SignIn"; 

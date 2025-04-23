@@ -20,7 +20,7 @@ const Features = () => {
 
         <div className="card-container">
           <Card
-            image="../../../images/featureWheel.png"
+            image="/images/featureWheel.png"
             title="ונוסעים משתלם יותר"
             text="איך נוסעים? פותחים את הרכב באמצעות קוד בקודנית המותקנת ברכב או באפליקציה"
           />
@@ -28,14 +28,14 @@ const Features = () => {
 
         <div className="card-container">
           <Card
-            image="../../../images/featureComputer.png"
+            image="/images/featureComputer.png"
             title="מזמינים רכב קרוב"
             text="איך מזמינים? בקלות ובמהירות דרך מערכת חכמה באתר, באפליקציה או בטלפון"
           />
         </div>
         <div className="card-container">
           <Card
-            image="../../../images/featureCar.png"
+            image="/images/featureCar.png"
             title="מצטרפים לשירות"
             text="איך מצטרפים? תהליך הרשמה פשוט וקל במגוון ערוצים לבחירתכם: כאן באתר, באפליקציה או בטלפון"
           />

@@ -1,5 +1,5 @@
 import "../Styles/RideShareInfoPage.css";
-import logoImage from "../../../images/logo.png";
+import logoImage from "/images/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 export default function RideShareInfoAnimated() {

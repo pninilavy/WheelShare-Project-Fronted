@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import NavBar from "./NavBar";
 import "../Styles/Background.css";
-import logoImage from "../../../images/logo.png";
+import logoImage from "/images/logo.png";
 import SignIn from "../User/SignIn";
 import SignUp from "../User/SignUp";
 import Features from "./Features";
@@ -83,13 +83,13 @@ export default function Background() {
               <NavBar />
             </div>
             <img
-              src="../../../images/buildings.png"
+              src="/images/buildings.png"
               className="buildings"
               alt="buildings"
             />
             <img src={logoImage} className="logo" alt="logo" />
             <img
-              src="../../../images/car.png"
+              src="/images/car.png"
               className="car"
               style={{ left: carPosition }}
               alt="car"

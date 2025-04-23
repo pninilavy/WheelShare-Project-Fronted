@@ -1,7 +1,7 @@
 import React from "react";
 import "../Styles/ContactSection.css";
 import Footer from "./Footer";
-import logoImage from "../../../images/logo.png"; 
+import logoImage from "/images/logo.png"; 
 import { Link, useNavigate } from "react-router-dom";
 function ContactSection() {
   const navigate=useNavigate();

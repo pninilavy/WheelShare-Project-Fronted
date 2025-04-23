@@ -36,12 +36,12 @@ const CommercialCarCard = ({
 
           <div className="details">
             <div className="detail-item">
-              <img src="../../../images/clock.png" alt="שעה" className="icon" />
+              <img src="/images/clock.png" alt="שעה" className="icon" />
               <span>{hourlyRate} לשעה + 1.8 ₪ לק"מ</span>
             </div>
             <div className="detail-item">
               <img
-                src="../../../images/calender.png"
+                src="/images/calender.png"
                 alt="יום"
                 className="icon"
               />
@@ -49,14 +49,14 @@ const CommercialCarCard = ({
             </div>
             <div className="detail-item">
               <img
-                src="../../../images/iconcar.png"
+                src="/images/iconcar.png"
                 alt="מזוודות"
                 className="icon"
               />
               <span>אוטו | {seats} מושבים | 5 מזוודות</span>
             </div>
             <div className="detail-item">
-              <img src="../../../images/waze.png" alt="Waze" className="icon" />
+              <img src="/images/waze.png" alt="Waze" className="icon" />
               <span>מערכת WAZE מותקנת ברכב</span>
             </div>
           </div>

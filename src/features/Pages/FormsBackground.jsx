@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom"; 
 import "../Styles/FormsBackground.css"; 
 
-const imageUrl = "../../../images/longBuildings.png"; 
+const imageUrl = "/images/longBuildings.png"; 
 
 export default function FormsBackground() {
   const navigate = useNavigate(); 
