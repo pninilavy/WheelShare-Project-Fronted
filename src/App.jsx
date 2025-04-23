@@ -38,7 +38,7 @@
 // }
 
 // export default App;
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import SignUp from "./features/User/SignUp";
 import SignIn from "./features/User/SignIn";
 import OrderRide from "./features/Orders/OrderRide";

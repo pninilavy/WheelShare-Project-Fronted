@@ -69,7 +69,7 @@ const CommercialCarCard = ({
       </div>
 
       <div className="car-card-footer" style={{ backgroundColor: footerColor }}>
-        <span className="car-type-bold">רכב מסחרי</span> - {carName} או דומה
+        <span className="car-type-bold">רכב מסחרי</span> - {carName} 
       </div>
     </div>
   );
