@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FaShekelSign, FaInfoCircle, FaHeadset, FaUser } from "react-icons/fa";
 export default function NavBar() {
   return (
