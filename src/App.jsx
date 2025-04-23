@@ -50,8 +50,7 @@ import ContactSection from "./features/Pages/ContactSection";
 import RideShareInfoPage from "./features/Pages/RideShareInfoPage";
 
 function App() {
-  return (
-    <Router>
+  return (<>
       <Routes>
         <Route path="/" element={<Background />} />
         <Route path="/background" element={<Background />} />
@@ -65,7 +64,7 @@ function App() {
       </Routes>
 
       <SignInAndLogOut />
-    </Router>
+      </>
   );
 }
 
