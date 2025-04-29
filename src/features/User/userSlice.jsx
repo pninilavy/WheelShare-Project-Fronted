@@ -8,7 +8,8 @@ export const serverSignUp = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       let { data } = await axios.post(
-        "https://localhost:7249/api/User/SignUp",
+        "https://wheelshare.azurewebsites.net/User/SignUp",
+        // "https://localhost:7249/api/User/SignUp",
         user
       );
       if (!data) {
@@ -29,7 +30,8 @@ export const serverSignIn = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       let { data } = await axios.post(
-        "https://localhost:7249/api/User/SignIn",
+        "https://wheelshare.azurewebsites.net/User/SignIn",
+        // "https://localhost:7249/api/User/SignIn",
         user
       );
       if (data) {
