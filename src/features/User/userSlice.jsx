@@ -30,7 +30,7 @@ export const serverSignIn = createAsyncThunk(
   async (user, thunkApi) => {
     try {
       let { data } = await axios.post(
-        "https://wheelshare.azurewebsites.net/User/SignIn",
+        "https://wheelshare.azurewebsites.net/api/User/SignIn",
         // "https://localhost:7249/api/User/SignIn",
         user
       );
