@@ -105,9 +105,9 @@ export default function RideBookingForm() {
 
     try {
       let { data } = await axios.post(
-        // "https://wheelshare.azurewebsites.net/api/Ride",
+        "https://wheelshare.azurewebsites.net/api/Ride",
 
-        "https://localhost:7249/api/Ride",
+        // "https://localhost:7249/api/Ride",
         updatedFormData
       );
       if (!data) {
