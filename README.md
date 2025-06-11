@@ -1,12 +1,59 @@
-# React + Vite
+WHEELSHARE – מערכת לשיתוף והשכרת רכבים חכמה
+🎯 תיאור קצר:
+מערכת חכמה מבוססת Web לניהול השכרה ושיתוף רכבים בין משתמשים, עם שיבוץ דינאמי של רכבים, תיאום נסיעות לפי זמינות ומיקום, אלגוריתם התאמה מתקדם, והרשאות משתמשים מבוססות JWT. המערכת כוללת יכולת שליחת מיילים, רספונסיביות מלאה, והשלמה אוטומטית של כתובות, תוך שימוש ב-OpenStreetMap במקום Google Maps API בתשלום.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+💻 טכנולוגיות עיקריות:
+Frontend: React.js (כולל Autocomplete)
 
-Currently, two official plugins are available:
+Backend: ASP.NET Core C#
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Database: Entity Framework Core עם SQL Server
 
-## Expanding the ESLint configuration
+Authentication: JWT
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+API חיצוני: OSRM (לתכנון מסלול וחישובי זמן)
+
+אחרים: Dependency Injection, מבנה שכבות MVC (Controller, Service, Repository, Models, DTOs), שליחת מיילים.
+
+📌 פיצ'רים עיקריים:
+דפי מערכת: רישום, התחברות, הזמנת נסיעה
+
+שיבוץ רכבים אוטומטי:
+
+חישוב זמן הליכה מהמשתמש לתחנות קרובות (עד 10 דקות).
+
+סינון רכבים לפי זמינות, מספר מקומות ותזמון.
+
+מניעת התנגשויות בזמני הזמנת רכבים.
+
+שיתוף נסיעות:
+
+התאמת נוסעים לפי נתוני מין, יעד, שעות וזמן סטייה.
+
+חישוב תועלת כלכלית לכל צד (נהג ונוסע).
+
+בחירת ההתאמה המשתלמת ביותר (תמחור דינאמי).
+
+מערכת זמינות רכבים:
+
+ניהול זמינות לפי תאריכים ושעות.
+
+מניעת התנגשויות לוגיסטיות בין הזמנות.
+
+התראות במייל:
+
+נשלחות בעת הזמנת נסיעה, ובמציאת שותף מתאים.
+
+ריספונסיביות והתאמה מלאה למובייל.
+
+🧠 אתגרים טכניים ונקודות חוזק:
+שימוש ב-OSRM במקום Google Maps לחישוב זמנים – פתרון חינמי, כולל תיאום בין API לנתוני המערכת.
+
+לוגיקת חישוב זמני נסיעה והליכה מדויקת, כולל טיפול בחריגים כמו חציית יום.
+
+מערכת התאמה חכמה לנסיעות שיתופיות תוך אופטימיזציה למחיר וזמן.
+
+ארכיטקטורת שירותים מבוססת Interface + Dependency Injection – ניתנת לבדיקה והרחבה.
+
+שימוש במבנה הפרדת שכבות כולל Repository Pattern.
+
